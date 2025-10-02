@@ -1,0 +1,1 @@
+import PaginatedTable from './PaginatedTable';export default {  title: 'Components/PaginatedTable',  component: PaginatedTable,};export const Default = () => <PaginatedTable />;
