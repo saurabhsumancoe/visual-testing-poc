@@ -1,5 +1,4 @@
 import React from 'react';
-import { fn } from '@storybook/test';
 import { PaginationControl } from './PaginationControl';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
@@ -28,10 +27,10 @@ export default {
       description: 'Array of options for rows per page',
     },
   },
-  // Use `fn` to spy on the callback args
+  // Use simple console.log functions for callbacks
   args: { 
-    onPageChange: fn(),
-    onRowsPerPageChange: fn(),
+    onPageChange: () => console.log('Page changed'),
+    onRowsPerPageChange: () => console.log('Rows per page changed'),
   },
 };
 
@@ -50,14 +49,6 @@ export const ScreenshotExample = {
     totalItems: 100,
     rowsPerPageOptions: [10, 25, 50, 100],
     initialRowsPerPage: 10,
-  },
-  play: async ({ canvasElement }) => {
-    // Simulate being on page 3 to show "21-30 of 100"
-    const component = canvasElement.querySelector('.pagination-control');
-    if (component) {
-      // This would simulate the state shown in the screenshot
-      component.querySelector('.pagination-control__range').textContent = '21–30 of 100';
-    }
   },
 };
 
