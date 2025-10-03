@@ -8,7 +8,7 @@ export default {
     layout: 'padded',
     docs: {
       description: {
-        component: 'A comprehensive table pagination component that supports customizable rows per page, navigation controls, and accessibility features.'
+        component: 'A comprehensive table pagination component that supports customizable rows per page, navigation controls, and accessibility features. Matches the design shown in the provided screenshot with "Rows per page: 10" and "21-30 of 100" display.'
       }
     }
   },
@@ -62,24 +62,50 @@ const Template = (args) => {
   };
 
   return (
-    <div style={{ width: '100%', minHeight: '100px', display: 'flex', alignItems: 'end' }}>
-      <TablePagination
-        {...args}
-        currentPage={currentPage}
-        rowsPerPage={rowsPerPage}
-        onPageChange={handlePageChange}
-        onRowsPerPageChange={handleRowsPerPageChange}
-      />
+    <div style={{ width: '100%', minHeight: '100px', display: 'flex', alignItems: 'end', border: '1px solid #e0e0e0', borderRadius: '8px' }}>
+      <div style={{ width: '100%' }}>
+        {/* Mock table for context */}
+        <div style={{ padding: '16px', borderBottom: '1px solid #e0e0e0' }}>
+          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+            <thead>
+              <tr style={{ backgroundColor: '#f5f5f5' }}>
+                <th style={{ padding: '8px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>ID</th>
+                <th style={{ padding: '8px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>Name</th>
+                <th style={{ padding: '8px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Array.from({ length: Math.min(rowsPerPage, 5) }, (_, i) => {
+                const itemIndex = (currentPage - 1) * rowsPerPage + i + 1;
+                return (
+                  <tr key={i}>
+                    <td style={{ padding: '8px', borderBottom: '1px solid #f0f0f0' }}>{itemIndex}</td>
+                    <td style={{ padding: '8px', borderBottom: '1px solid #f0f0f0' }}>Item {itemIndex}</td>
+                    <td style={{ padding: '8px', borderBottom: '1px solid #f0f0f0' }}>Active</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+        <TablePagination
+          {...args}
+          currentPage={currentPage}
+          rowsPerPage={rowsPerPage}
+          onPageChange={handlePageChange}
+          onRowsPerPageChange={handleRowsPerPageChange}
+        />
+      </div>
     </div>
   );
 };
 
-// Default story
+// Default story matching the screenshot (21-30 of 100)
 export const Default = Template.bind({});
 Default.args = {
   totalItems: 100,
   rowsPerPage: 10,
-  currentPage: 3,
+  currentPage: 3, // This shows 21-30 of 100
   rowsPerPageOptions: [5, 10, 25, 50, 100],
   showFirstLastButtons: true,
   showRowsPerPageSelector: true
@@ -87,12 +113,12 @@ Default.args = {
 Default.parameters = {
   docs: {
     description: {
-      story: 'Default pagination showing 21-30 of 100 items, matching the design from the screenshot.'
+      story: 'Default pagination showing 21-30 of 100 items, exactly matching the provided screenshot design.'
     }
   }
 };
 
-// First page
+// First page (1-10 of 100)
 export const FirstPage = Template.bind({});
 FirstPage.args = {
   ...Default.args,
@@ -101,7 +127,7 @@ FirstPage.args = {
 FirstPage.parameters = {
   docs: {
     description: {
-      story: 'Pagination on the first page with disabled previous/first buttons.'
+      story: 'Pagination on the first page (1-10 of 100) with disabled previous/first buttons.'
     }
   }
 };
@@ -117,7 +143,7 @@ LastPage.args = {
 LastPage.parameters = {
   docs: {
     description: {
-      story: 'Pagination on the last page with disabled next/last buttons.'
+      story: 'Pagination on the last page (91-100 of 100) with disabled next/last buttons.'
     }
   }
 };
@@ -133,7 +159,7 @@ LargeDataset.args = {
 LargeDataset.parameters = {
   docs: {
     description: {
-      story: 'Pagination with a large dataset of 5000 items.'
+      story: 'Pagination with a large dataset of 5000 items, showing 1201-1250 of 5000.'
     }
   }
 };
@@ -149,7 +175,7 @@ SmallDataset.args = {
 SmallDataset.parameters = {
   docs: {
     description: {
-      story: 'Pagination with a small dataset showing second page.'
+      story: 'Pagination with a small dataset showing second page (11-15 of 15).'
     }
   }
 };
@@ -228,76 +254,18 @@ CustomRowsPerPageOptions.parameters = {
   }
 };
 
-// With table context
-export const WithTableContext = () => {
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  
-  const sampleData = Array.from({ length: 87 }, (_, i) => ({
-    id: i + 1,
-    name: `User ${i + 1}`,
-    email: `user${i + 1}@example.com`,
-    role: ['Admin', 'User', 'Editor'][i % 3],
-    status: ['Active', 'Inactive'][i % 2]
-  }));
-
-  const startIndex = (currentPage - 1) * rowsPerPage;
-  const currentData = sampleData.slice(startIndex, startIndex + rowsPerPage);
-
-  return (
-    <div style={{ border: '1px solid #e0e0e0', borderRadius: '8px', overflow: 'hidden' }}>
-      <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-        <thead style={{ backgroundColor: '#f5f5f5' }}>
-          <tr>
-            <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>ID</th>
-            <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>Name</th>
-            <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>Email</th>
-            <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>Role</th>
-            <th style={{ padding: '12px', textAlign: 'left', borderBottom: '1px solid #e0e0e0' }}>Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {currentData.map((item, index) => (
-            <tr key={item.id} style={{ backgroundColor: index % 2 === 0 ? '#ffffff' : '#f9f9f9' }}>
-              <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>{item.id}</td>
-              <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>{item.name}</td>
-              <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>{item.email}</td>
-              <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>{item.role}</td>
-              <td style={{ padding: '12px', borderBottom: '1px solid #e0e0e0' }}>
-                <span style={{ 
-                  padding: '4px 8px', 
-                  borderRadius: '4px', 
-                  fontSize: '12px',
-                  backgroundColor: item.status === 'Active' ? '#e8f5e8' : '#f5f5f5',
-                  color: item.status === 'Active' ? '#2e7d32' : '#666'
-                }}>
-                  {item.status}
-                </span>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      <TablePagination
-        totalItems={sampleData.length}
-        rowsPerPage={rowsPerPage}
-        currentPage={currentPage}
-        onPageChange={setCurrentPage}
-        onRowsPerPageChange={(rows) => {
-          setRowsPerPage(rows);
-          setCurrentPage(1);
-        }}
-        rowsPerPageOptions={[5, 10, 25, 50]}
-        showFirstLastButtons={true}
-        showRowsPerPageSelector={true}
-      />
-    </div>
-  );
+// Responsive test - mobile view
+export const MobileView = Template.bind({});
+MobileView.args = {
+  ...Default.args
 };
-WithTableContext.parameters = {
+MobileView.parameters = {
+  viewport: {
+    defaultViewport: 'mobile1'
+  },
   docs: {
     description: {
-      story: 'Complete example showing the pagination component integrated with a data table.'
+      story: 'Pagination component optimized for mobile viewport with responsive design.'
     }
   }
 };

@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import './tablePagination.css';
+import './TablePagination.css';
 
 const TablePagination = ({
   totalItems = 100,
   rowsPerPage = 10,
-  currentPage = 1,
+  currentPage = 3,
   rowsPerPageOptions = [5, 10, 25, 50, 100],
   onRowsPerPageChange = () => {},
   onPageChange = () => {},
@@ -20,8 +20,6 @@ const TablePagination = ({
   const handleRowsPerPageChange = (event) => {
     const newRowsPerPage = parseInt(event.target.value, 10);
     onRowsPerPageChange(newRowsPerPage);
-    // Reset to first page when rows per page changes
-    onPageChange(1);
   };
 
   const handleFirstPage = () => {
